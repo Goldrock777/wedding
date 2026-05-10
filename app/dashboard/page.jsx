@@ -99,7 +99,14 @@ function RfpDetail({ rfp, bids, shortIds }) {
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="font-display text-2xl">{rfp.coupleNames || "Wedding"}</h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h2 className="font-display text-2xl">{rfp.coupleNames || "Wedding"}</h2>
+          <div className="flex flex-wrap gap-1 text-sm">
+            <Link href={`/planner?rfp=${rfp.id}&tab=budget`} className="btn-ghost">Budget</Link>
+            <Link href={`/planner?rfp=${rfp.id}&tab=tasks`} className="btn-ghost">Checklist</Link>
+            <Link href={`/planner?rfp=${rfp.id}&tab=dayof`} className="btn-ghost">Day-of</Link>
+          </div>
+        </div>
         <div className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
           <Fact k="Date" v={rfp.eventDate} />
           <Fact k="City" v={rfp.city} />

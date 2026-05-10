@@ -65,11 +65,12 @@ function HowItWorks() {
     ["1", "Post your wedding", "Date, city, guest count, the vendors you need."],
     ["2", "Receive bids", "Matched vendors send sealed offers."],
     ["3", "Compare and book", "Side-by-side prices, reviews, packages."],
+    ["4", "Plan it all", "Auto-built budget, checklist and day-of timeline tailored to your culture."],
   ];
   return (
     <section className="border-t border-ink/10 py-16">
       <h2 className="font-display text-3xl">How it works</h2>
-      <div className="mt-6 grid gap-6 md:grid-cols-3">
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map(([n, t, d]) => (
           <div key={n}>
             <div className="font-display text-2xl text-ink/40">{n}</div>
