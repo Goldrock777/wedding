@@ -51,7 +51,7 @@ function RfpCard({ rfp }) {
     .filter(Boolean);
   return (
     <Link
-      href={`/weddings/${rfp.id}`}
+      href={`/weddings/view?id=${rfp.id}`}
       className="card flex flex-col gap-3 transition hover:-translate-y-1"
     >
       <div className="flex items-start justify-between gap-4">

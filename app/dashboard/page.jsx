@@ -169,7 +169,7 @@ function RfpDetail({ rfp, bids, shortIds }) {
         <div className="mb-3 flex items-center justify-between">
           <h3 className="font-display text-2xl">Bids ({bids.length})</h3>
           <Link
-            href={`/weddings/${rfp.id}`}
+            href={`/weddings/view?id=${rfp.id}`}
             className="text-sm font-semibold text-rose-700 hover:underline"
           >
             View vendor-facing page →

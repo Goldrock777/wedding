@@ -1,7 +1,8 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   allServices,
   getCultureBySlug,
@@ -14,8 +15,17 @@ import {
   subscribe,
 } from "@/lib/store";
 
-export default function BidOnWeddingPage({ params }) {
-  const { id } = use(params);
+export default function BidOnWeddingPage() {
+  return (
+    <Suspense fallback={null}>
+      <BidView />
+    </Suspense>
+  );
+}
+
+function BidView() {
+  const params = useSearchParams();
+  const id = params.get("id") || "";
   const [rfp, setRfp] = useState(null);
   const [bids, setBids] = useState([]);
   const [posted, setPosted] = useState(false);
@@ -29,6 +39,7 @@ export default function BidOnWeddingPage({ params }) {
   });
 
   useEffect(() => {
+    if (!id) return;
     setRfp(getRfp(id));
     setBids(bidsForRfp(id));
     return subscribe(() => {
@@ -74,10 +85,14 @@ export default function BidOnWeddingPage({ params }) {
     });
   }
 
-  if (!rfp) {
+  if (!id || !rfp) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center">
         <h1 className="font-display text-4xl">Wedding not found</h1>
+        <p className="mt-2 text-ink/60">
+          This wedding may have been removed, or the link was opened in a
+          different browser. Open weddings live in your browser only.
+        </p>
         <Link href="/weddings" className="btn-primary mt-6">
           Back to open weddings
         </Link>
