@@ -12,25 +12,17 @@ export default function WeddingsPage() {
     return subscribe((s) => setRfps(s.rfps));
   }, []);
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
-      <span className="chip">For vendors</span>
-      <h1 className="mt-3 font-display text-5xl">Open weddings to bid on</h1>
-      <p className="mt-2 max-w-2xl text-ink/70">
-        Browse couples actively requesting bids. Sealed bids are submitted from
-        each wedding's page — only the couple sees what you offered.
+    <div className="mx-auto max-w-6xl px-6 py-12">
+      <h1 className="font-display text-4xl">Open weddings</h1>
+      <p className="mt-2 text-ink/60">
+        Couples actively requesting bids. Only the couple sees what you offer.
       </p>
 
-      <div className="mt-10">
+      <div className="mt-8">
         {rfps.length === 0 ? (
-          <div className="card text-center">
-            <h3 className="font-display text-2xl">No live weddings yet.</h3>
-            <p className="mt-2 text-ink/70">
-              Once a couple posts a wedding it will show up here for vendors.
-              Try posting a demo wedding to see the full flow.
-            </p>
-            <Link href="/post-wedding" className="btn-primary mt-4">
-              Post a demo wedding
-            </Link>
+          <div className="rounded-md border border-ink/10 p-6 text-center">
+            <p>No live weddings yet.</p>
+            <Link href="/post-wedding" className="btn-primary mt-4">Post a demo wedding</Link>
           </div>
         ) : (
           <div className="grid gap-4 lg:grid-cols-2">
@@ -52,44 +44,34 @@ function RfpCard({ rfp }) {
   return (
     <Link
       href={`/weddings/view?id=${rfp.id}`}
-      className="card flex flex-col gap-3 transition hover:-translate-y-1"
+      className="block rounded-md border border-ink/10 bg-cream p-5 transition hover:border-ink/30"
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs uppercase tracking-wider text-rose-700">
-            {culture?.name || "Wedding"}
-          </div>
-          <h3 className="font-display text-2xl">
-            {rfp.coupleNames || "Anonymous couple"}
-          </h3>
+          <div className="text-xs text-ink/50">{culture?.name || "Wedding"}</div>
+          <h3 className="font-display text-xl">{rfp.coupleNames || "Anonymous couple"}</h3>
           <div className="text-sm text-ink/60">
             {rfp.eventDate} · {rfp.city}
             {rfp.venue ? ` · ${rfp.venue}` : ""}
           </div>
         </div>
-        <span className="chip">
-          {rfp.guestCount ? `${rfp.guestCount} guests` : "Guest count tbd"}
+        <span className="text-xs text-ink/60">
+          {rfp.guestCount ? `${rfp.guestCount} guests` : "TBD"}
         </span>
       </div>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-1">
         {services.slice(0, 6).map((s) => (
-          <span key={s.slug} className="chip">
-            <span>{s.icon}</span>
-            {s.name}
-          </span>
+          <span key={s.slug} className="chip">{s.name}</span>
         ))}
         {services.length > 6 && (
-          <span className="chip">+{services.length - 6} more</span>
+          <span className="chip">+{services.length - 6}</span>
         )}
       </div>
       {rfp.budget && (
-        <div className="text-sm text-ink/70">
-          Budget: ${Number(rfp.budget).toLocaleString()}
+        <div className="mt-3 text-sm text-ink/60">
+          Budget ${Number(rfp.budget).toLocaleString()}
         </div>
       )}
-      <div className="mt-2 text-xs font-semibold uppercase tracking-wider text-rose-700">
-        Place a bid →
-      </div>
     </Link>
   );
 }

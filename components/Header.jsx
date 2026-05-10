@@ -1,24 +1,18 @@
 import Link from "next/link";
 
 const NAV = [
-  { href: "/vendors", label: "Find vendors" },
+  { href: "/vendors", label: "Vendors" },
   { href: "/cultures", label: "Cultures" },
   { href: "/weddings", label: "Open weddings" },
-  { href: "/post-wedding", label: "Post your wedding" },
-  { href: "/vendor/join", label: "Join as vendor" },
+  { href: "/about", label: "About" },
 ];
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-30 border-b border-ink/5 bg-cream/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-rose-600 text-cream shadow-soft">
-            <span className="font-display text-xl leading-none">K</span>
-          </span>
-          <span className="font-display text-2xl font-semibold tracking-tight">
-            Knot <span className="text-rose-600">&amp;</span> Co
-          </span>
+    <header className="border-b border-ink/10 bg-cream">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <Link href="/" className="font-display text-xl font-semibold">
+          Knot &amp; Co
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => (
@@ -29,7 +23,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <Link href="/dashboard" className="btn-ghost hidden sm:inline-flex">
-            My dashboard
+            Dashboard
           </Link>
           <Link href="/post-wedding" className="btn-primary">
             Post wedding

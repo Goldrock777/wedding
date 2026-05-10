@@ -14,7 +14,6 @@ export default function VendorDetail({ id }) {
   useEffect(() => {
     setRfps(listRfps());
   }, []);
-
   useEffect(() => {
     if (selectedRfp) setShortlisted(shortlistFor(selectedRfp).includes(id));
     else setShortlisted(false);
@@ -22,8 +21,8 @@ export default function VendorDetail({ id }) {
 
   if (!vendor) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="font-display text-4xl">Vendor not found</h1>
+      <div className="mx-auto max-w-3xl px-6 py-24 text-center">
+        <h1 className="font-display text-3xl">Vendor not found</h1>
         <Link href="/vendors" className="btn-primary mt-6">
           Back to directory
         </Link>
@@ -39,153 +38,106 @@ export default function VendorDetail({ id }) {
     .filter(Boolean);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-8">
-      <Link href="/vendors" className="btn-ghost mb-4">
+    <div className="mx-auto max-w-5xl px-6 py-12">
+      <Link href="/vendors" className="text-sm text-ink/60 hover:text-ink">
         ← All vendors
       </Link>
-      <section className="grid gap-8 md:grid-cols-[1.2fr_1fr]">
-        <div className="overflow-hidden rounded-3xl border border-ink/10 bg-gradient-to-br from-rose-100 via-sand to-gold-400/40 p-12">
-          <div className="grid place-items-center text-[10rem] leading-none">
-            {vendor.emoji}
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-display text-4xl">{vendor.name}</h1>
+        <div className="text-sm text-ink/60">
+          ★ {vendor.rating.toFixed(1)} ({vendor.reviews})
+        </div>
+      </div>
+      <p className="mt-1 text-ink/70">{vendor.tagline}</p>
+      <div className="mt-2 text-sm text-ink/60">
+        {vendor.city} · {vendor.yearsActive} years · from $
+        {vendor.priceFrom.toLocaleString()}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1">
+        {services.map((s) => (
+          <span key={s.slug} className="chip">{s.name}</span>
+        ))}
+      </div>
+
+      <div className="mt-10 grid gap-10 md:grid-cols-[1.5fr_1fr]">
+        <div>
+          <h2 className="font-display text-2xl">About</h2>
+          <p className="mt-2 text-ink/80">{vendor.bio}</p>
+
+          <h3 className="mt-8 font-display text-xl">Sample packages</h3>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <Package tier="Essentials" price={vendor.priceFrom} />
+            <Package
+              tier="Signature"
+              price={Math.round(vendor.priceFrom * 1.6)}
+              highlight
+            />
+            <Package tier="Heirloom" price={Math.round(vendor.priceFrom * 2.4)} />
           </div>
         </div>
-        <div className="flex flex-col gap-4">
-          {vendor.badge && (
-            <span className="chip w-max border-rose-300 bg-rose-50 text-rose-700">
-              {vendor.badge}
-            </span>
-          )}
-          <h1 className="font-display text-5xl leading-tight">{vendor.name}</h1>
-          <p className="text-lg text-ink/70">{vendor.tagline}</p>
-          <div className="flex flex-wrap gap-2 text-sm text-ink/70">
-            <span>★ {vendor.rating.toFixed(1)} ({vendor.reviews} reviews)</span>
-            <span>·</span>
-            <span>{vendor.city}</span>
-            <span>·</span>
-            <span>{vendor.yearsActive} years in business</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {services.map((s) => (
-              <span key={s.slug} className="chip">
-                <span>{s.icon}</span>
-                {s.name}
-              </span>
-            ))}
-          </div>
-          <div className="card mt-2 flex flex-col gap-3">
-            <div className="flex items-baseline justify-between">
-              <span className="text-sm text-ink/60">Starting from</span>
-              <span className="font-display text-3xl text-rose-700">
-                ${vendor.priceFrom.toLocaleString()}
-              </span>
-            </div>
-            <div className="text-xs text-ink/50">
-              Final price set by the bid this vendor sends to your wedding.
-            </div>
-            <hr className="border-ink/10" />
-            <label className="label">Add this vendor to a posted wedding</label>
+
+        <aside className="space-y-6">
+          <div className="card space-y-3">
+            <div className="text-sm font-medium">Add to a posted wedding</div>
             <select
               className="select"
               value={selectedRfp}
               onChange={(e) => setSelectedRfp(e.target.value)}
             >
-              <option value="">Select one of your weddings…</option>
+              <option value="">Select a wedding…</option>
               {rfps.map((r) => (
                 <option key={r.id} value={r.id}>
-                  {r.coupleNames || "Wedding"} — {r.eventDate} · {r.city}
+                  {r.coupleNames || "Wedding"} — {r.eventDate}
                 </option>
               ))}
             </select>
-            <div className="flex gap-2">
-              <button
-                disabled={!selectedRfp}
-                className="btn-primary flex-1 disabled:opacity-40"
-                onClick={() => {
-                  if (shortlisted) unshortlist(selectedRfp, vendor.id);
-                  else shortlist(selectedRfp, vendor.id);
-                  setShortlisted(!shortlisted);
-                }}
-              >
-                {shortlisted ? "✓ Shortlisted" : "Add to shortlist"}
-              </button>
-              <Link
-                href={`/post-wedding?invite=${vendor.id}`}
-                className="btn-secondary"
-              >
-                Post a wedding
-              </Link>
-            </div>
+            <button
+              disabled={!selectedRfp}
+              className="btn-primary w-full disabled:opacity-40"
+              onClick={() => {
+                if (shortlisted) unshortlist(selectedRfp, vendor.id);
+                else shortlist(selectedRfp, vendor.id);
+                setShortlisted(!shortlisted);
+              }}
+            >
+              {shortlisted ? "Shortlisted ✓" : "Add to shortlist"}
+            </button>
+            <Link
+              href={`/post-wedding?invite=${vendor.id}`}
+              className="btn-secondary w-full"
+            >
+              Post a wedding
+            </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="mt-14 grid gap-8 md:grid-cols-3">
-        <div className="md:col-span-2">
-          <h2 className="font-display text-3xl">About</h2>
-          <p className="mt-3 text-ink/80">{vendor.bio}</p>
-          <h3 className="mt-8 font-display text-2xl">Sample packages</h3>
-          <div className="mt-3 grid gap-4 sm:grid-cols-3">
-            <Package
-              tier="Essentials"
-              price={vendor.priceFrom}
-              points={["Core service", "Up to 6 hours", "Single primary contact"]}
-            />
-            <Package
-              tier="Signature"
-              price={Math.round(vendor.priceFrom * 1.6)}
-              points={["Full event coverage", "Add-on extras", "2-person team"]}
-              highlight
-            />
-            <Package
-              tier="Heirloom"
-              price={Math.round(vendor.priceFrom * 2.4)}
-              points={[
-                "Multi-day coverage",
-                "Custom design",
-                "Priority response",
-              ]}
-            />
+          <div className="card space-y-2 text-sm">
+            <Fact label="Cultures" value={cultureNames.join(", ") || "—"} />
+            <Fact label="Languages" value={vendor.languages.join(", ")} />
+            <Fact label="City" value={vendor.city} />
           </div>
-        </div>
-        <aside className="card h-max">
-          <h3 className="font-display text-xl">Quick facts</h3>
-          <Fact label="Cultures served" value={cultureNames.join(", ") || "—"} />
-          <Fact label="Languages" value={vendor.languages.join(", ")} />
-          <Fact label="City" value={vendor.city} />
-          <Fact label="Years active" value={`${vendor.yearsActive}`} />
         </aside>
-      </section>
+      </div>
     </div>
   );
 }
 
-function Package({ tier, price, points, highlight }) {
+function Package({ tier, price, highlight }) {
   return (
     <div
-      className={`rounded-2xl border p-5 shadow-soft ${
-        highlight
-          ? "border-rose-400 bg-rose-50"
-          : "border-ink/10 bg-cream"
+      className={`rounded-md border p-4 ${
+        highlight ? "border-ink bg-ink text-cream" : "border-ink/10 bg-cream"
       }`}
     >
-      <div className="font-display text-xl">{tier}</div>
-      <div className="mt-1 text-2xl font-semibold text-rose-700">
-        ${price.toLocaleString()}
-      </div>
-      <ul className="mt-4 space-y-1.5 text-sm text-ink/70">
-        {points.map((p) => (
-          <li key={p}>• {p}</li>
-        ))}
-      </ul>
+      <div className="font-display text-lg">{tier}</div>
+      <div className="mt-1 text-sm">${price.toLocaleString()}</div>
     </div>
   );
 }
 
 function Fact({ label, value }) {
   return (
-    <div className="mt-3 border-t border-ink/5 pt-3 text-sm">
-      <div className="text-xs uppercase tracking-wider text-ink/50">{label}</div>
-      <div className="text-ink">{value}</div>
+    <div>
+      <div className="text-xs text-ink/50">{label}</div>
+      <div>{value}</div>
     </div>
   );
 }
